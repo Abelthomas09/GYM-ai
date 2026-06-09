@@ -1,7 +1,7 @@
 import { Router, type Request, type Response } from "express";
-import { prisma } from "../lib/prisma";
-import { generateTrainingPlan } from "../lib/ai";
-import { requireVerifiedUser, type AuthenticatedRequest } from "../lib/auth";
+import { prisma } from "../lib/prisma.js";
+import { generateTrainingPlan } from "../lib/ai.js";
+import { requireVerifiedUser, type AuthenticatedRequest } from "../lib/auth.js";
 
 export const planRouter = Router();
 

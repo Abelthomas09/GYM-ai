@@ -1,6 +1,6 @@
 import { Router, type Request, type Response } from "express";
-import { prisma } from "../lib/prisma";
-import { requireVerifiedUser, type AuthenticatedRequest } from "../lib/auth";
+import { prisma } from "../lib/prisma.js";
+import { requireVerifiedUser, type AuthenticatedRequest } from "../lib/auth.js";
 
 export const profileRouter = Router();
 
