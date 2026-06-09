@@ -1,0 +1,47 @@
+@import "tailwindcss";
+@import "@neondatabase/neon-js/ui/tailwind";
+
+@theme {
+  --font-sans: "Geist", system-ui, sans-serif;
+
+  --color-background: #f4f7f2;
+  --color-foreground: #14201c;
+  --color-muted: #64736d;
+  --color-border: #d8e0da;
+  --color-card: #ffffff;
+  --color-card-muted: #edf3ef;
+  --color-accent: #0f766e;
+  --color-accent-hover: #0b5f59;
+  --color-accent-soft: #d9f2ec;
+  --color-highlight: #f97316;
+  --color-highlight-soft: #ffedd5;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at top left, rgba(15, 118, 110, 0.12), transparent 34rem),
+      linear-gradient(180deg, #fbfdf9 0%, var(--color-background) 42rem);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: var(--color-accent-soft);
+    color: var(--color-foreground);
+  }
+
+  /* Override Better Auth skeleton colors */
+  [data-slot="skeleton"],
+  .animate-pulse {
+    background-color: #e5ebe6 !important;
+  }
+}
