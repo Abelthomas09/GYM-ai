@@ -1,9 +1,11 @@
 import type { NextFunction, Request, Response } from "express";
-import { createRemoteJWKSet, jwtVerify, type JWTPayload } from "jose";
 
 const authUrl = process.env.NEON_AUTH_URL || process.env.VITE_NEON_AUTH_URL;
 
-let jwks: ReturnType<typeof createRemoteJWKSet> | null = null;
+type AuthPayload = Record<string, unknown>;
+
+let joseModule: Promise<any> | null = null;
+let jwks: any = null;
 
 export interface AuthenticatedRequest extends Request {
   authUser?: {
@@ -13,10 +15,17 @@ export interface AuthenticatedRequest extends Request {
   };
 }
 
-function getJwks() {
+function getJose() {
+  joseModule ??= import("jose");
+  return joseModule;
+}
+
+async function getJwks() {
   if (!authUrl) {
     throw new Error("NEON_AUTH_URL is required for authenticated API routes");
   }
+
+  const { createRemoteJWKSet } = await getJose();
 
   if (!jwks) {
     const baseUrl = authUrl.endsWith("/") ? authUrl : `${authUrl}/`;
@@ -26,7 +35,7 @@ function getJwks() {
   return jwks;
 }
 
-function readEmailVerified(payload: JWTPayload) {
+function readEmailVerified(payload: AuthPayload) {
   const value =
     payload.emailVerified ??
     payload.email_verified ??
@@ -50,7 +59,8 @@ export async function requireVerifiedUser(
       return res.status(401).json({ error: "Authentication required" });
     }
 
-    const { payload } = await jwtVerify(token, getJwks());
+    const { jwtVerify } = await getJose();
+    const { payload } = await jwtVerify(token, await getJwks());
     const userId = payload.sub;
 
     if (!userId) {
