@@ -21,7 +21,8 @@ export async function generateTrainingPlan(
   const apiKey = process.env.OPEN_ROUTER_KEY;
 
   if (!apiKey) {
-    throw new Error("OPEN_ROUTER_KEY is not set in environment variables");
+    console.warn("[AI] OPEN_ROUTER_KEY is not set. Using local fallback plan.");
+    return buildFallbackPlan(normalizedProfile);
   }
 
   const openai = new OpenAI({
@@ -108,7 +109,7 @@ function formatPlanResponse(
   return plan;
 }
 
-function buildFallbackPlan(
+export function buildFallbackPlan(
   profile: UserProfile,
 ): Omit<TrainingPlan, "id" | "userId" | "version" | "createdAt"> {
   const splitFocus: Record<string, string[]> = {

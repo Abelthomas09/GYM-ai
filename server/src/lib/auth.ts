@@ -1,6 +1,9 @@
 import type { NextFunction, Request, Response } from "express";
 
-const authUrl = process.env.NEON_AUTH_URL || process.env.VITE_NEON_AUTH_URL;
+const fallbackAuthUrl =
+  "https://ep-polished-hall-apn1r61g.neonauth.c-7.us-east-1.aws.neon.tech/neondb/auth";
+const authUrl =
+  process.env.NEON_AUTH_URL || process.env.VITE_NEON_AUTH_URL || fallbackAuthUrl;
 
 type AuthPayload = Record<string, unknown>;
 

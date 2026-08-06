@@ -1,6 +1,6 @@
 import { Router, type Request, type Response } from "express";
 import { prisma } from "../lib/prisma.js";
-import { generateTrainingPlan } from "../lib/ai.js";
+import { buildFallbackPlan, generateTrainingPlan } from "../lib/ai.js";
 import { requireVerifiedUser, type AuthenticatedRequest } from "../lib/auth.js";
 
 export const planRouter = Router();
@@ -36,9 +36,23 @@ planRouter.post(
         planJson = await generateTrainingPlan(profile);
       } catch (error) {
         console.error("AI generation failed:", error);
-        return res.status(500).json({
-          error: "Failed to generate training plan. Please try again.",
-          details: error instanceof Error ? error.message : "Unknown error",
+        const fallbackPlan = buildFallbackPlan(profile);
+        const planText = JSON.stringify(fallbackPlan, null, 2);
+
+        const newPlan = await prisma.training_plans.create({
+          data: {
+            user_id: userId,
+            plan_json: fallbackPlan as any,
+            plan_text: planText,
+            version: nextVersion,
+          },
+        });
+
+        return res.json({
+          id: newPlan.id,
+          version: newPlan.version,
+          createdAt: newPlan.created_at,
+          fallback: true,
         });
       }
 

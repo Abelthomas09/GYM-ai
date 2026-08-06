@@ -15,6 +15,7 @@ function App() {
     <NeonAuthUIProvider
       authClient={authClient}
       defaultTheme="light"
+      credentials={{ forgotPassword: true, usernameRequired: false }}
       emailOTP
       social={{ providers: ["google"] }}
       redirectTo="/onboarding"

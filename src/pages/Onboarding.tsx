@@ -2,7 +2,7 @@ import { RedirectToSignIn, SignedIn } from "@neondatabase/neon-js/auth/react";
 import { useAuth } from "../context/useAuth";
 import { Card } from "../components/ui/Card";
 import { Select } from "../components/ui/Select";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Textarea } from "../components/ui/Textarea";
 import { Button } from "../components/ui/Button";
 import { ArrowRight, Loader2, MailCheck } from "lucide-react";
@@ -75,8 +75,16 @@ function EmailVerificationCard({ email }: { email: string }) {
   const [error, setError] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
+  const [autoSendTriggered, setAutoSendTriggered] = useState(false);
 
-  async function sendCode() {
+  useEffect(() => {
+    if (!autoSendTriggered) {
+      setAutoSendTriggered(true);
+      sendCode(true);
+    }
+  }, [autoSendTriggered, email]);
+
+  async function sendCode(isAutoSend = false) {
     setIsSending(true);
     setError("");
     setMessage("");

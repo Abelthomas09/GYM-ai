@@ -1,4 +1,4 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/useAuth";
 import { useState } from "react";
 import { Button } from "../components/ui/Button";
@@ -16,6 +16,7 @@ import PageLoader from "../components/layout/PageLoader";
 export default function Profile() {
   const { user, isLoading, plan, generatePlan } = useAuth();
   const [isRegenerating, setIsRegenerating] = useState(false);
+  const navigate = useNavigate();
 
   if (isLoading) {
     return <PageLoader label="Refreshing your training plan..." />;
@@ -26,7 +27,48 @@ export default function Profile() {
   }
 
   if (!plan) {
-    return <Navigate to="/onboarding" replace />;
+    return (
+      <div className="min-h-screen pt-24 pb-12 px-6">
+        <div className="max-w-3xl mx-auto space-y-6">
+          <div className="rounded-lg bg-[var(--color-foreground)] p-8 text-white shadow-lg shadow-slate-900/10">
+            <div className="text-center">
+              <h1 className="text-3xl font-bold mb-3">Welcome to GymAI</h1>
+              <p className="text-white/80 mb-6">
+                We haven’t generated your first training plan yet. Tell us a bit about your goals and we’ll create a personalized program just for you.
+              </p>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-1 sm:justify-center">
+              <Button
+                className="mx-auto w-full max-w-xs"
+                onClick={() => navigate("/onboarding")}
+              >
+                Create My First Plan
+              </Button>
+            </div>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <Card variant="bordered" className="p-5">
+              <h2 className="font-semibold mb-2">What to expect</h2>
+              <p className="text-[var(--color-muted)] text-sm">
+                A strength plan built around your available days, experience, and equipment.
+              </p>
+            </Card>
+            <Card variant="bordered" className="p-5">
+              <h2 className="font-semibold mb-2">Personalized progress</h2>
+              <p className="text-[var(--color-muted)] text-sm">
+                We tailor workouts, reps, and recovery guidance to make your training smarter.
+              </p>
+            </Card>
+            <Card variant="bordered" className="p-5">
+              <h2 className="font-semibold mb-2">Flexible schedule</h2>
+              <p className="text-[var(--color-muted)] text-sm">
+                Choose how many days you want to train and we’ll build the plan around it.
+              </p>
+            </Card>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   function formatDate(dateString: string) {
