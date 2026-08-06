@@ -80,11 +80,11 @@ function EmailVerificationCard({ email }: { email: string }) {
   useEffect(() => {
     if (!autoSendTriggered) {
       setAutoSendTriggered(true);
-      sendCode(true);
+      sendCode();
     }
   }, [autoSendTriggered, email]);
 
-  async function sendCode(isAutoSend = false) {
+  async function sendCode() {
     setIsSending(true);
     setError("");
     setMessage("");
