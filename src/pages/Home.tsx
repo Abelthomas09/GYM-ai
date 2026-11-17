@@ -12,7 +12,7 @@ import {
 import { Button } from "../components/ui/Button";
 import { Card } from "../components/ui/Card";
 import { useAuth } from "../context/useAuth";
-import heroImage from "../assets/gym-ai-hero.png";
+import heroImage from "../assets/gym-ai-hero.jpg";
 
 const features = [
   {
@@ -100,6 +100,9 @@ export default function Home() {
               src={heroImage}
               alt="Athlete preparing for a strength workout in a bright gym"
               className="relative aspect-[4/3] w-full rounded-lg border border-[var(--color-border)] object-cover shadow-xl shadow-slate-900/10"
+              width={1536}
+              height={1024}
+              fetchPriority="high"
             />
           </div>
         </div>

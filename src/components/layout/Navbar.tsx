@@ -5,7 +5,7 @@ import { useAuth } from "../../context/useAuth";
 import { UserButton } from "@neondatabase/neon-js/auth/react";
 
 export default function Navbar() {
-  const { user, isLoading } = useAuth();
+  const { user } = useAuth();
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-[var(--color-border)] bg-white/85 backdrop-blur-md">
       <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
@@ -20,12 +20,7 @@ export default function Navbar() {
         </Link>
 
         <nav className="flex items-center gap-2">
-          {isLoading ? (
-            <div className="flex items-center gap-2">
-              <span className="h-8 w-16 animate-pulse rounded-lg bg-[var(--color-card-muted)]" />
-              <span className="h-9 w-9 animate-pulse rounded-lg bg-[var(--color-card-muted)]" />
-            </div>
-          ) : user ? (
+          {user ? (
             <>
               <Link to="/profile">
                 <Button variant="ghost" size="sm">
